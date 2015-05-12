@@ -1,0 +1,7 @@
+uint8 bumpers
+uint8 cliff
+uint8 state
+---
+bool bumper_left
+bool bumper_mid
+bool bumper_right

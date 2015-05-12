@@ -1,0 +1,15 @@
+(cl:defpackage nahchoina-srv
+  (:use )
+  (:export
+   "BUMPDATA"
+   "<BUMPDATA-REQUEST>"
+   "BUMPDATA-REQUEST"
+   "<BUMPDATA-RESPONSE>"
+   "BUMPDATA-RESPONSE"
+   "CLIFFDATA"
+   "<CLIFFDATA-REQUEST>"
+   "CLIFFDATA-REQUEST"
+   "<CLIFFDATA-RESPONSE>"
+   "CLIFFDATA-RESPONSE"
+  ))
+

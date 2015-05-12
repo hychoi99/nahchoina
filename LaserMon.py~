@@ -1,0 +1,79 @@
+#!/usr/bin/env python
+
+#Laser Monitor Node
+
+
+import roslib; roslib.load_manifest('nahchoina')
+import sys
+import rospy
+import math
+from nahchoina.msg import *
+from nahchoina.srv import *
+from kobuki_msgs.msg import BumperEvent,WheelDropEvent
+from vector import Vector
+from sensor_msgs.msg import LaserScan
+from std_msgs.msg import String
+from geometry_msgs.msg import Twist
+
+def LaserData(data):
+
+       scans = []
+       for d in data.ranges:
+           if d > 0:
+               scans.append(d)
+           
+       angle_min = data.angle_min
+       angle_max = data.angle_max
+       angle_inc = data.angle_increment
+       forceVectors = []
+            
+       i = 0
+       for laser in scans:
+           scan_angle = angle_min + (angle_inc*i)
+           opposing_angle = scan_angle + math.pi
+           i += 1
+
+           if(laser != 0):
+               force = 1/(laser**2)
+           else:
+               force = 0
+           forceVectors.append(Vector(force*math.cos(opposing_angle),force*math.sin(opposing_angle)))
+
+            
+       outputVector = Vector(0,0)
+       for x in forceVectors:
+           outputVector = outputVector.plus(x)
+       outputVector = outputVector.plus(Vector(1,0))  
+
+       mag = math.sqrt((outputVector.x**2)+(outputVector.y**2))
+    
+       #print mag
+       if(mag < 50):
+           event = 'laserclear'
+           linear = .1
+	   angular = 0
+       else:
+    	   event = 'laseravoid'
+           angular = 5*(outputVector.y/mag)
+           linear = 0.06
+
+       if outputVector.y < 0:
+           angular = angular * 10
+    
+       print event
+       msg = SteeringMessage()
+       msg.event = event
+       msg.linear = linear
+       msg.angular = angular
+       pub = rospy.Publisher('/LaserMon', SteeringMessage, queue_size = 10)
+       pub.publish(msg)
+
+def LaserMon():
+	rospy.init_node('LaserMon',anonymous=True)
+	rospy.Subscriber('/scan', LaserScan, LaserData)
+	rospy.spin()
+
+if __name__ == "__main__":
+	try:
+	        LaserMon()
+    	except rospy.ROSInterruptException: pass

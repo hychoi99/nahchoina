@@ -1,0 +1,28 @@
+<launch>
+<include file="$(find turtlebot_bringup)/launch/minimal.launch"/>
+
+<include file="$(find openni_launch)/launch/openni.launch" />
+
+<node pkg="PKG_NAME" type="BumpMonitor.py" name="BumpMonitor">
+   
+</node>
+<node pkg="PKG_NAME" type="CliffMonitor.py" name="CliffMonitor">
+   
+</node>
+
+<node pkg="PKG_NAME" type="LaserMon.py" name="LaserMon">
+  
+</node>
+
+<node pkg="PKG_NAME" type="TargetMon.py" name="TargetMon">
+   
+</node>
+
+<node pkg="PKG_NAME" type="FSMMaster3.py" name="FSMMaster3">
+   
+</node>
+
+
+
+</launch>
+
