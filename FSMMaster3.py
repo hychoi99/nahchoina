@@ -176,8 +176,6 @@ class FSMMaster3():
         #knowing which state to transition to
         #depends on the state we transition from
 
-
-#############################################################
     def HandleLaserEvent(self,LaserDataMessage):
 	event = LaserDataMessage.event
 	#print "before", self.linear
@@ -185,7 +183,7 @@ class FSMMaster3():
 	#print "after", self. linear
 	self.LaserAngular = LaserDataMessage.angular
 	self.HandleEvent(event)
-####################################################################
+    
     def HandleTargetEvent(self, TargetDataMessage): #'targetaquired' 'allclear' '
 	event = TargetDataMessage.event
 	self.TargetLinear = TargetDataMessage.linear
